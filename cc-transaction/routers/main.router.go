@@ -2,6 +2,7 @@ package router
 
 import (
 	controller "cc-transaction/controllers"
+	"cc-transaction/utils"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -17,5 +18,5 @@ func MainRouter(con controller.ControllerInterface) {
 	v1.GET("/postgre/query", con.QueryPostgre)
 
 	logrus.Info("starts")
-	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
+	r.Run(utils.GetEnv("PORT"))
 }

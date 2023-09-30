@@ -17,9 +17,9 @@ func MainRouter(con controller.ControllerInterface) {
 	v1.POST("/postgre/insert", con.InsertPostgre)
 	v1.GET("/postgre/query", con.QueryPostgre)
 
-	v2 := r.Group("v2")
-	v2.POST("/register")
+	// v2 := r.Group("v2")
+	// v2.POST("/register", con.Register)
 
 	logrus.Info("starts")
-	r.Run(utils.GetEnv("PORT")) // listen and serve on 0.0.0.0:8080 (for windows "lcalhost:8080")
+	r.Run(utils.GetEnv("PORT"))
 }

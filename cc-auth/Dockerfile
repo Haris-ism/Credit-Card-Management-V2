@@ -2,7 +2,7 @@ FROM golang:1.19-alpine3.16 AS builder
 
 WORKDIR /app
 
-COPY . .
+COPY ./cc-auth .
 
 RUN go build
 
@@ -15,7 +15,7 @@ RUN apk update && apk add --no-cache tzdata
 ENV TZ="Asia/Jakarta"
 
 COPY --from=builder /app/cc-auth .
-COPY .env .
+COPY cc-auth/.env .
 
 EXPOSE 8888
 
