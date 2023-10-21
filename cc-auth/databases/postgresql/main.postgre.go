@@ -1,6 +1,8 @@
 package postgre
 
 import (
+	auth "cc-auth/controllers/models"
+	dbs "cc-auth/databases/postgresql/models"
 	"cc-auth/models"
 	"cc-auth/utils"
 
@@ -17,6 +19,15 @@ type (
 	PostgreInterface interface {
 		Insert(req models.ItemList) error
 		Query() ([]models.ItemList, error)
+		EmailQuery(email string)(dbs.Credentials,error)
+		CreateCredentials(cred dbs.Credentials)error
+		Login(req auth.Credentials) error
+		AddCC(cc dbs.CreditCards) error
+		QueryEmailCC(email string)(dbs.CreditCards,error)
+		TopUpCC(cred dbs.CreditCards)error
+		GetCC()([]dbs.CreditCards,error)
+		QueryIDCC(id int)(dbs.CreditCards,error)
+		DelCC(id int)error
 	}
 )
 
@@ -30,7 +41,7 @@ func InitPostgre() PostgreInterface {
 	} else {
 		logrus.Printf("Init Postgre Success")
 	}
-	db.AutoMigrate(&models.ItemList{})
+	db.AutoMigrate(&models.ItemList{},&dbs.Credentials{},&dbs.CreditCards{})
 
 	return &postgreDB{
 		postgre: db,

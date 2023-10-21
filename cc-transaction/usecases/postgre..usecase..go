@@ -10,11 +10,3 @@ func (uc *usecase) InsertDB(req models.ItemList) error {
 
 	return nil
 }
-func (uc *usecase) QueryDB(req []models.ItemList) error {
-	err := uc.postgre.Query(req)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}

@@ -1,6 +1,8 @@
 package postgre
 
 import (
+	dbModels "cc-transaction/databases/postgresql/models"
+	hModels "cc-transaction/hosts/callback/models"
 	"cc-transaction/models"
 	"cc-transaction/utils"
 
@@ -16,7 +18,10 @@ type (
 	}
 	PostgreInterface interface {
 		Insert(req models.ItemList) error
-		Query(req []models.ItemList) error
+		GetCC(req hModels.TransactionItems) (dbModels.CreditCards,error)
+		OrderTransItem(req dbModels.Order) (dbModels.Order,error)
+		DeductCC(req dbModels.CreditCards) error
+		UpdateTransItem(req dbModels.Order) error
 	}
 )
 
@@ -30,7 +35,7 @@ func InitPostgre() PostgreInterface {
 	} else {
 		logrus.Printf("Init Postgre Success")
 	}
-	db.AutoMigrate(&models.ItemList{})
+	db.AutoMigrate(&models.ItemList{},&dbModels.Order{})
 
 	return &postgreDB{
 		postgre: db,

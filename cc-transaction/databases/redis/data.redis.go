@@ -1,8 +1,8 @@
 package redis_db
 
 import (
-	"cc-transaction/models"
 	"context"
+	"cc-transaction/models"
 	"time"
 
 	"github.com/sirupsen/logrus"

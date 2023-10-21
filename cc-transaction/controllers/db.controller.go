@@ -1,8 +1,8 @@
 package controller
 
 import (
-	"cc-transaction/models"
 	"net/http"
+	"cc-transaction/models"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -77,20 +77,6 @@ func (c *controller) InsertPostgre(ctx *gin.Context) {
 		return
 	}
 	if err := c.usecase.InsertDB(req); err != nil {
-		res.Message = "Failed to Insert Postgre"
-		res.Code = http.StatusInternalServerError
-		ctx.JSON(res.Code, res)
-		return
-	}
-	ctx.JSON(http.StatusOK, res)
-}
-func (c *controller) QueryPostgre(ctx *gin.Context) {
-	res := models.GeneralResponse{
-		Message: "success write euy",
-		Code:    http.StatusOK,
-	}
-	req := []models.ItemList{}
-	if err := c.usecase.QueryDB(req); err != nil {
 		res.Message = "Failed to Insert Postgre"
 		res.Code = http.StatusInternalServerError
 		ctx.JSON(res.Code, res)

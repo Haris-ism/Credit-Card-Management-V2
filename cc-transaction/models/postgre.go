@@ -5,8 +5,7 @@ import "gorm.io/gorm"
 //table
 type ItemList struct {
 	gorm.Model
-	Item  string `json:"item" binding:"required"`
-	Price int    `json:"price" binding:"required"`
+	Inquiry
 }
 
 type Inquiry struct {

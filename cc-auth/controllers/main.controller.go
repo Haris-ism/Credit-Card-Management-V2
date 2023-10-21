@@ -16,6 +16,15 @@ type (
 		ReadRedis(ctx *gin.Context)
 		InsertPostgre(ctx *gin.Context)
 		QueryPostgre(ctx *gin.Context)
+		Register(ctx *gin.Context)
+		Login(ctx *gin.Context)
+		AddCC(ctx *gin.Context)
+		TopUpCC(ctx *gin.Context)
+		GetCC(ctx *gin.Context)
+		DelCC(ctx *gin.Context)
+		TransItem(ctx *gin.Context)
+		InquiryItems(ctx *gin.Context)
+		InquiryDiscounts(ctx *gin.Context)
 	}
 )
 
