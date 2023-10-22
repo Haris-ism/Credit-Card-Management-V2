@@ -1,0 +1,683 @@
+{
+	"info": {
+		"_postman_id": "0e4463e2-0a33-4aab-a5c9-970b61f23b39",
+		"name": "payment-microservices",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25693977"
+	},
+	"item": [
+		{
+			"name": "cc-auth",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"test1@admin.com\",\n    \"password\":\"test123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:9999/v2/register",
+							"host": [
+								"localhost"
+							],
+							"port": "9999",
+							"path": [
+								"v2",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Get Token\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.code).to.eql(200);",
+									"});",
+									"",
+									"let jsonData = JSON.parse(responseBody);",
+									"",
+									"pm.environment.set(\"token\", jsonData.data);",
+									"console.log(jsonData.data);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"test1@admin.com\",\n    \"password\":\"test123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:9999/v2/login",
+							"host": [
+								"localhost"
+							],
+							"port": "9999",
+							"path": [
+								"v2",
+								"login"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "login",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\":\"test1@admin.com\",\n    \"password\":\"test123\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:9999/v2/login",
+									"host": [
+										"localhost"
+									],
+									"port": "9999",
+									"path": [
+										"v2",
+										"login"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"message\": \"Success\",\n    \"code\": 200,\n    \"data\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QxQGFkbWluLmNvbSIsImV4cCI6MTY5ODA1NzEwNH0.eP_uKtNvaYhIcEfwwAuAiMd_lAEMcSM_UC48VuvAKdQ\"\n}"
+						}
+					]
+				},
+				{
+					"name": "add-credit-cards",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"bank\":\"BCA\",\n    \"limit\":9999999,\n    \"email\":\"test1@admin.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:9999/v2/add-credit-cards",
+							"host": [
+								"localhost"
+							],
+							"port": "9999",
+							"path": [
+								"v2",
+								"add-credit-cards"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "add-credit-cards",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QxQGFkbWluLmNvbSIsImV4cCI6MTY5ODA1NzEwNH0.eP_uKtNvaYhIcEfwwAuAiMd_lAEMcSM_UC48VuvAKdQ",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"bank\":\"BCA\",\n    \"limit\":9999999,\n    \"email\":\"test1@admin.com\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:9999/v2/add-credit-cards",
+									"host": [
+										"localhost"
+									],
+									"port": "9999",
+									"path": [
+										"v2",
+										"add-credit-cards"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"message\": \"Success\",\n    \"code\": 200\n}"
+						}
+					]
+				},
+				{
+					"name": "top-up-credit-cards",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"test1@admin.com\",\n    \"balance\":200000\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:9999/v2/top-up-credit-cards",
+							"host": [
+								"localhost"
+							],
+							"port": "9999",
+							"path": [
+								"v2",
+								"top-up-credit-cards"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "top-up-credit-cards",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QxQGFkbWluLmNvbSIsImV4cCI6MTY5ODA1NzEwNH0.eP_uKtNvaYhIcEfwwAuAiMd_lAEMcSM_UC48VuvAKdQ",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\":\"test1@admin.com\",\n    \"balance\":200000\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:9999/v2/top-up-credit-cards",
+									"host": [
+										"localhost"
+									],
+									"port": "9999",
+									"path": [
+										"v2",
+										"top-up-credit-cards"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"message\": \"Success\",\n    \"code\": 200\n}"
+						}
+					]
+				},
+				{
+					"name": "get-credit-cards",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"setup cc\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.code).to.eql(200);",
+									"});",
+									"",
+									"let jsonData = JSON.parse(responseBody);",
+									"",
+									"pm.environment.set(\"cc_number\", jsonData.data[0].CC_Number);",
+									"pm.environment.set(\"cvv\", jsonData.data[0].CVV);",
+									"console.log(jsonData.data);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:9999/v2/credit-cards",
+							"host": [
+								"localhost"
+							],
+							"port": "9999",
+							"path": [
+								"v2",
+								"credit-cards"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "get-credit-cards",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QxQGFkbWluLmNvbSIsImV4cCI6MTY5ODA1NzEwNH0.eP_uKtNvaYhIcEfwwAuAiMd_lAEMcSM_UC48VuvAKdQ",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "localhost:9999/v2/credit-cards",
+									"host": [
+										"localhost"
+									],
+									"port": "9999",
+									"path": [
+										"v2",
+										"credit-cards"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"message\": \"Success\",\n    \"code\": 200,\n    \"data\": [\n        {\n            \"ID\": 10,\n            \"Bank\": \"BCA\",\n            \"Limit\": 9999999,\n            \"Balance\": 0,\n            \"CC_Number\": \"9916150567\",\n            \"CVV\": \"213\",\n            \"CredsEmail\": \"test1@admin.com\"\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "delete-credit-cards",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:9999/v2/delete-credit-cards/10",
+							"host": [
+								"localhost"
+							],
+							"port": "9999",
+							"path": [
+								"v2",
+								"delete-credit-cards",
+								"10"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "delete-credit-cards",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QxQGFkbWluLmNvbSIsImV4cCI6MTY5ODA1NzEwNH0.eP_uKtNvaYhIcEfwwAuAiMd_lAEMcSM_UC48VuvAKdQ",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "localhost:9999/v2/delete-credit-cards/4",
+									"host": [
+										"localhost"
+									],
+									"port": "9999",
+									"path": [
+										"v2",
+										"delete-credit-cards",
+										"4"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"message\": \"Success\",\n    \"code\": 200\n}"
+						}
+					]
+				},
+				{
+					"name": "Inquiry Items",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:9999/v2/inquiry/items",
+							"host": [
+								"localhost"
+							],
+							"port": "9999",
+							"path": [
+								"v2",
+								"inquiry",
+								"items"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Inquiry Items",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QxQGFkbWluLmNvbSIsImV4cCI6MTY5ODA1NzEwNH0.eP_uKtNvaYhIcEfwwAuAiMd_lAEMcSM_UC48VuvAKdQ",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "localhost:9999/v2/inquiry/items",
+									"host": [
+										"localhost"
+									],
+									"port": "9999",
+									"path": [
+										"v2",
+										"inquiry",
+										"items"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"message\": \"Success\",\n    \"code\": 200,\n    \"data\": [\n        {\n            \"id\": 1,\n            \"name\": \"steam wallet 100k\",\n            \"type\": \"voucher\",\n            \"price\": 110000,\n            \"quantity\": 0\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "Inquiry Discounts",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:9999/v2/inquiry/discounts",
+							"host": [
+								"localhost"
+							],
+							"port": "9999",
+							"path": [
+								"v2",
+								"inquiry",
+								"discounts"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Inquiry Discounts",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QxQGFkbWluLmNvbSIsImV4cCI6MTY5ODA1NzEwNH0.eP_uKtNvaYhIcEfwwAuAiMd_lAEMcSM_UC48VuvAKdQ",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "localhost:9999/v2/inquiry/discounts",
+									"host": [
+										"localhost"
+									],
+									"port": "9999",
+									"path": [
+										"v2",
+										"inquiry",
+										"discounts"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"message\": \"Success\",\n    \"code\": 200,\n    \"data\": [\n        {\n            \"id\": 1,\n            \"name\": \"Voucher10%Off\",\n            \"type\": \"voucher\",\n            \"percentage\": 10\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "TransItems",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Signature",
+								"value": "asdasda",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"item_id\":\"1\",\n    \"discount\":\"Voucher10%Off\",\n    \"quantity\":\"2\",\n    \"cc_number\":\"4694913634\",\n    \"cvv\":\"112\",\n    \"price\":\"110000\",\n    \"name\":\"steam wallet 100k\",\n    \"type\":\"voucher\",\n    \"percentage\":\"10\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:9999/v2/transaction/items",
+							"host": [
+								"localhost"
+							],
+							"port": "9999",
+							"path": [
+								"v2",
+								"transaction",
+								"items"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "merchant",
+			"item": [
+				{
+					"name": "get-inquiry-items",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8888/v2/inquiry/items",
+							"host": [
+								"localhost"
+							],
+							"port": "8888",
+							"path": [
+								"v2",
+								"inquiry",
+								"items"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-inquiry-discounts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8888/v2/inquiry/discounts",
+							"host": [
+								"localhost"
+							],
+							"port": "8888",
+							"path": [
+								"v2",
+								"inquiry",
+								"discounts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add-inquiry-items",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"steam wallet 100k\",\n    \"type\":\"voucher\",\n    \"price\":110000\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8888/v2/inquiry/items",
+							"host": [
+								"localhost"
+							],
+							"port": "8888",
+							"path": [
+								"v2",
+								"inquiry",
+								"items"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add-inquiry-discounts",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"Voucher10%Off\",\n    \"type\":\"voucher\",\n    \"percentage\":10\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8888/v2/inquiry/discounts",
+							"host": [
+								"localhost"
+							],
+							"port": "8888",
+							"path": [
+								"v2",
+								"inquiry",
+								"discounts"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
