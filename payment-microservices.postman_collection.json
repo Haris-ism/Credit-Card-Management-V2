@@ -542,14 +542,7 @@
 							]
 						},
 						"method": "POST",
-						"header": [
-							{
-								"key": "Signature",
-								"value": "asdasda",
-								"type": "text",
-								"disabled": true
-							}
-						],
+						"header": [],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n    \"item_id\":\"1\",\n    \"discount\":\"Voucher10%Off\",\n    \"quantity\":\"2\",\n    \"cc_number\":\"4694913634\",\n    \"cvv\":\"112\",\n    \"price\":\"110000\",\n    \"name\":\"steam wallet 100k\",\n    \"type\":\"voucher\",\n    \"percentage\":\"10\"\n}",
@@ -572,7 +565,40 @@
 							]
 						}
 					},
-					"response": []
+					"response": [
+						{
+							"name": "TransItems",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"item_id\":\"1\",\n    \"discount\":\"Voucher10%Off\",\n    \"quantity\":\"2\",\n    \"cc_number\":\"4694913634\",\n    \"cvv\":\"112\",\n    \"price\":\"110000\",\n    \"name\":\"steam wallet 100k\",\n    \"type\":\"voucher\",\n    \"percentage\":\"10\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:9999/v2/transaction/items",
+									"host": [
+										"localhost"
+									],
+									"port": "9999",
+									"path": [
+										"v2",
+										"transaction",
+										"items"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"message\": \"Success\",\n    \"code\": 200,\n    \"data\": {\n        \"item_id\": \"1\",\n        \"item_name\": \"steam wallet 100k\",\n        \"quantity\": \"2\",\n        \"cc_number\": \"4694913634\",\n        \"code\": [\n            \"abkg5ood36eglcbi4l26gn3i3\",\n            \"1he1fjofl4ca49joa0e09igi1\"\n        ]\n    }\n}"
+						}
+					]
 				}
 			]
 		},

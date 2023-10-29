@@ -17,6 +17,8 @@ For more detail regarding endpoints please use postman and import the payment-mi
 ### Note:
 - Databases postgre and redis are already included within the containers, you dont need to setup anymore when using docker.
 - Some requests require token, signature, or credit card info (generated when adding the credit card). Please refer to the postman file.
+- To use the microservices you are required to register your email first and acquire the token using the login api.
+- Before doing the transaction, make sure to add the products and discounts on merchant service, for more detail please refer to the postman file.
 
 ### if you are using docker:
 
