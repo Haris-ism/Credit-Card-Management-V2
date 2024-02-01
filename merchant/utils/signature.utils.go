@@ -7,11 +7,25 @@ import (
 	"errors"
 	"fmt"
 	"merchant/controllers/models"
+	"merchant/protogen/merchant"
 
 	"github.com/sirupsen/logrus"
+	"google.golang.org/grpc/metadata"
 )
 
-func SignatureValidation(reqHeader models.ReqHeader,reqBody models.ReqTransItem)error{
+func SignatureValidationGrpc(reqHeader metadata.MD,reqBody *merchant.ReqTransItemsModel)error{
+	body,err:=json.Marshal(reqBody)
+	hash:=Signature(string(body),reqHeader.Get("timestamp")[0])
+	// fmt.Println("hash:",hash)
+	// fmt.Println("sig:",reqHeader.Signature)
+	if hash!=reqHeader.Get("signature")[0]{
+		logrus.Error("err:",err)
+		return errors.New("Invalid Signature")
+	}
+	return nil
+}
+
+func SignatureValidation(reqHeader models.ReqHeader,reqBody models.DecReqTransItem)error{
 
 	body,err:=json.Marshal(reqBody)
 	hash:=Signature(string(body),reqHeader.TimeStamp)
@@ -27,9 +41,9 @@ func SignatureValidation(reqHeader models.ReqHeader,reqBody models.ReqTransItem)
 func Signature(req string,ts string)string{
 	key:=GetEnv("SIG_KEY")
 	data:=req+"&"+ts+"&"+key
-	fmt.Println("data:",data)
+	// fmt.Println("data:",data)
 	res:=HashSha512(key,data)
-	fmt.Println("res:",res)
+	// fmt.Println("res:",res)
 	return res
 }
 func HashSha512(secret, data string) string {

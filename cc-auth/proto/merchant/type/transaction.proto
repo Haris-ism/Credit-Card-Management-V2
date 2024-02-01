@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+option go_package = "protogen/merchant";
+
+message ReqTransItemsModel{
+    string          Request = 1 [json_name="request"];
+}
+
+message ResMerchantTransModel {
+    string          Message = 1 [json_name="message"];
+    int32           Code    = 2 [json_name="code"];
+    string          Data    = 3 [json_name="data"];
+}

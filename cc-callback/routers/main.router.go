@@ -1,7 +1,7 @@
 package router
 
 import (
-	controller "cc-callback/controllers"
+	"cc-callback/controller"
 	"cc-callback/middleware"
 	"cc-callback/utils"
 

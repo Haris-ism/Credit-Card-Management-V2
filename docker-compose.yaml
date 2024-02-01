@@ -22,6 +22,8 @@ services:
       - "6378:6379"
   cc-auth:
     container_name: cc-auth
+    image: cc-auth:latest
+    # network_mode: host
     build:
       context: .
       dockerfile: ./cc-auth/Dockerfile
@@ -32,6 +34,8 @@ services:
       - "9999:9999"
   cc-transaction:
     container_name: cc-transaction
+    image: cc-transaction:latest
+    # network_mode: host
     build:
       context: .
       dockerfile: ./cc-transaction/Dockerfile
@@ -40,8 +44,11 @@ services:
         condition: service_healthy
     ports:
       - "9090:9090"
+      - "9089:9089"
   cc-callback:
     container_name: cc-callback
+    image: cc-callback:latest
+    # network_mode: host
     build:
       context: .
       dockerfile: ./cc-callback/Dockerfile
@@ -50,8 +57,11 @@ services:
         condition: service_healthy
     ports:
       - "9091:9091"
+      - "9095:9095"
   merchant:
     container_name: merchant
+    image: merchant:latest
+    # network_mode: host
     build:
       context: .
       dockerfile: ./merchant/Dockerfile
@@ -60,3 +70,4 @@ services:
         condition: service_healthy
     ports:
       - "8888:8888"
+      - "8887:8887"

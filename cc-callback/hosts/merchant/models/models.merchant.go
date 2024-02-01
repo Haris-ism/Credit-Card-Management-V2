@@ -33,6 +33,10 @@ type TransactionItems struct{
 	Amount			string			`json:"amount"`
 }
 
+type DecTransactionItems struct{
+	Req				string			`json:"request"`
+}
+
 type ResponseItems struct{
 	ID			string		`json:"item_id"`
 	Name		string		`json:"item_name"`
@@ -44,5 +48,5 @@ type ResponseItems struct{
 type ResponseTransactionItems struct {
 	Message string      `json:"message"`
 	Code    int         `json:"code"`
-	Data    ResponseItems
+	Data    string		`json:"data"`
 }

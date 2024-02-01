@@ -2,14 +2,14 @@ package usecase
 
 import (
 	"cc-callback/constants"
-	cModels "cc-callback/controllers/models"
+	cModels "cc-callback/controller/models"
 	"cc-callback/hosts/merchant/models"
 	"encoding/json"
 	"errors"
 	"net/http"
 )
 
-func (uc *usecase)TransItem(req models.TransactionItems, headers cModels.ReqHeader)(models.ResponseItems,error){
+func (uc *usecase)TransItem(req models.DecTransactionItems, headers cModels.ReqHeader)(string,error){
 	result:=models.ResponseTransactionItems{}
 	header := make(http.Header)
 	header.Add("Accept", "*/*")

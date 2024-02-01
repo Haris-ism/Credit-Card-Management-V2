@@ -2,7 +2,7 @@ package controller
 
 import (
 	"cc-callback/constants"
-	"cc-callback/controllers/models"
+	"cc-callback/controller/models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

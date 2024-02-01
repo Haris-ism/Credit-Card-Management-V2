@@ -2,9 +2,8 @@ package controller
 
 import (
 	"cc-callback/constants"
-	"cc-callback/controllers/models"
+	"cc-callback/controller/models"
 	mModels "cc-callback/hosts/merchant/models"
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -15,7 +14,7 @@ func (c *controller)TransItem(ctx *gin.Context){
 		Message: constants.SUCCESS,
 		Code:http.StatusOK,
 	}
-	req:=mModels.TransactionItems{}
+	req:=mModels.DecTransactionItems{}
 	if err:=ctx.BindJSON(&req);err!=nil{
 		res.Message=constants.INVALID_INPUT
 		res.Code=http.StatusBadRequest
@@ -29,7 +28,7 @@ func (c *controller)TransItem(ctx *gin.Context){
 		ctx.JSON(http.StatusBadRequest,res)
 		return
 	}
-	fmt.Println("ieu header:",reqHeader)
+	
 	data,err:=c.usecase.TransItem(req,reqHeader)
 	if err!=nil{
 		res.Message=err.Error()

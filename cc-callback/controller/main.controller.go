@@ -1,7 +1,7 @@
 package controller
 
 import (
-	usecase "cc-callback/usecases"
+	"cc-callback/usecase"
 
 	"github.com/gin-gonic/gin"
 )

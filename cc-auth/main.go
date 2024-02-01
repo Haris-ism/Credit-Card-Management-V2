@@ -4,22 +4,34 @@ import (
 	controller "cc-auth/controllers"
 	postgre "cc-auth/databases/postgresql"
 	redis_db "cc-auth/databases/redis"
+	grpcClient "cc-auth/grpc/client"
+	grpcCallback "cc-auth/grpc/client/callback"
+	grpcTransaction "cc-auth/grpc/client/transaction"
 	host "cc-auth/hosts"
-	callbackHost "cc-auth/hosts/callback"
+	"cc-auth/hosts/callback"
 	"cc-auth/hosts/transaction"
 	router "cc-auth/routers"
 	usecase "cc-auth/usecases"
 )
 
 func main() {
-	callback:=callbackHost.InitCallback()
-	transaction:=transaction.InitTransaction()
-	host:=host.InitHost(callback,transaction)
 	postgre := postgre.InitPostgre()
 	redis := redis_db.InitRedis()
-	uc := usecase.InitUsecase(postgre, redis,host)
+
+	callback:=callback.InitCallback()
+	transaction:=transaction.InitTransaction()
+	callbackGrpc:=grpcCallback.InitGrpcCallback()
+	transactionGrpc:=grpcTransaction.InitGrpcTransaction()
+	hostGrpc:=grpcClient.InitGrpcClient(callbackGrpc,transactionGrpc)
+	host:=host.InitHost(callback,transaction)
+	uc := usecase.InitUsecase(postgre, redis,host,hostGrpc)
 	con := controller.InitController(uc)
 
+	// go func (){
+	// 	res,_:=hostGrpc.Callback().InquiryItems()
+	// 	fmt.Println("grpc res:",res)
+
+	// }()
 	router.MainRouter(con)
 
 }

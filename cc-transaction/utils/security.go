@@ -2,16 +2,23 @@ package utils
 
 import (
 	"bytes"
+	"cc-transaction/constants"
 	"cc-transaction/hosts/callback/models"
+	"cc-transaction/protogen/merchant"
+
+	// "cc-transaction/hosts/transaction/models"
 	"crypto/aes"
 	"crypto/cipher"
 	"crypto/rand"
 	"encoding/base64"
 	"encoding/gob"
 	"encoding/hex"
+	"errors"
 	"fmt"
 
 	"io"
+
+	"github.com/goccy/go-json"
 )
 
 func serializeStruct(input interface{}) ([]byte, error) {
@@ -54,7 +61,6 @@ func EncryptTransItemRes(req models.ResponseItems,codes []string)(models.Respons
 	chanQuantity:=make(chan string)
 	chanCC:=make(chan string)
 	chanCode:=make(chan string)
-	fmt.Println("ieu real:",codes)
 
 	go EncryptFunc(req.ID,chanID)
 	go EncryptFunc(req.Name,chanName)
@@ -75,7 +81,6 @@ func EncryptArray(arr []string,ch chan string){
 	serialized, err := serializeStruct(arr)
 	if err != nil {
 		fmt.Println("err:",err)
-
 	}
 	res,err:=EncryptionAES(string(serialized))
 	if err!=nil{
@@ -99,87 +104,63 @@ func DecryptArray(arr string,ch chan []string){
 	ch<-result
 }
 
-func EncryptTransItem(req models.ReqCallbackItems)(models.ReqCallbackItems,error){
-	chanID:=make(chan string)
-	chanDiscount:=make(chan string)
-	chanQuantity:=make(chan string)
-	chanCCNumber:=make(chan string)
-	// chanCVV:=make(chan string)
-	chanAmount:=make(chan string)
-	// chanPrice:=make(chan string)
-	// chanName:=make(chan string)
-	// chanType:=make(chan string)
-	// chanPercentage:=make(chan string)
+func EncryptTransItemGrpc(req models.ReqCallbackItems)(*merchant.ReqTransItemsModel,error){
+	res:=&merchant.ReqTransItemsModel{}
+	// fmt.Println("req:",req)
+	bytes,err:=json.Marshal(req)
+	if err!=nil{
+		return res,errors.New(constants.ERROR_DB)
+	}
+	chanReq:=make(chan string)
+	go EncryptFunc(string(bytes),chanReq)
+	encrypted:=<-chanReq
+	// fmt.Println("encrypted string:",encrypted)
+	res.Request=encrypted
 
-	// itemId:=strconv.Itoa(req.ItemID)
-	// qty:=strconv.Itoa(req.Quantity)
-	// amount:=strconv.Itoa(req.Amount)
-	// price:=strconv.Itoa(req.Price)
-	// percent:=strconv.Itoa(req.Percentage)
-	go EncryptFunc(req.ItemID,chanID)
-	go EncryptFunc(req.Discount,chanDiscount)
-	go EncryptFunc(req.Quantity,chanQuantity)
-	go EncryptFunc(req.CCNumber,chanCCNumber)
-	// go EncryptFunc(req.CVV,chanCVV)
-	go EncryptFunc(req.Amount,chanAmount)
-	// go EncryptFunc(req.Price,chanPrice)
-	// go EncryptFunc(req.Name,chanName)
-	// go EncryptFunc(req.Type,chanType)
-	// go EncryptFunc(req.Percentage,chanPercentage)
-
-	req.ItemID=<-chanID
-	req.Discount=<-chanDiscount
-	req.Quantity=<-chanQuantity
-	req.CCNumber=<-chanCCNumber
-	// req.CVV=<-chanCVV
-	req.Amount=<-chanAmount
-	// req.Price=<-chanPrice
-	// req.Name=<-chanName
-	// req.Type=<-chanType
-	// req.Percentage=<-chanPercentage
-
-	return req,nil
+	return res,nil
 }
-func DecryptTransItem(req models.TransactionItems)(models.TransactionItems,error){
-	chanID:=make(chan string)
-	chanDiscount:=make(chan string)
-	chanQuantity:=make(chan string)
-	chanCCNumber:=make(chan string)
-	// chanCVV:=make(chan string)
-	chanAmount:=make(chan string)
-	// chanPrice:=make(chan string)
-	// chanName:=make(chan string)
-	// chanType:=make(chan string)
-	// chanPercentage:=make(chan string)
+func EncryptTransItem(req models.ReqCallbackItems)(models.DecTransactionItems,error){
+	res:=models.DecTransactionItems{}
+	// fmt.Println("req:",req)
+	bytes,err:=json.Marshal(req)
+	if err!=nil{
+		return res,errors.New(constants.ERROR_DB)
+	}
+	chanReq:=make(chan string)
+	go EncryptFunc(string(bytes),chanReq)
+	encrypted:=<-chanReq
+	// fmt.Println("encrypted string:",encrypted)
+	res.Req=encrypted
 
-	// itemId:=strconv.Itoa(req.ItemID)
-	// qty:=strconv.Itoa(req.Quantity)
-	// amount:=strconv.Itoa(req.Amount)
-	// price:=strconv.Itoa(req.Price)
-	// percent:=strconv.Itoa(req.Percentage)
-	go DecryptFunc(req.ItemID,chanID)
-	go DecryptFunc(req.Discount,chanDiscount)
-	go DecryptFunc(req.Quantity,chanQuantity)
-	go DecryptFunc(req.CCNumber,chanCCNumber)
-	// go EncryptFunc(req.CVV,chanCVV)
-	go DecryptFunc(req.Amount,chanAmount)
-	// go EncryptFunc(req.Price,chanPrice)
-	// go EncryptFunc(req.Name,chanName)
-	// go EncryptFunc(req.Type,chanType)
-	// go EncryptFunc(req.Percentage,chanPercentage)
+	return res,nil
+}
+func DecryptTransItemGrpc(req *merchant.ReqTransItemsModel)(models.TransactionItems,error){
+	res:=models.TransactionItems{}
+	chanReq:=make(chan string)
+	go DecryptFunc(req.Request,chanReq)
 
-	req.ItemID=<-chanID
-	req.Discount=<-chanDiscount
-	req.Quantity=<-chanQuantity
-	req.CCNumber=<-chanCCNumber
-	// req.CVV=<-chanCVV
-	req.Amount=<-chanAmount
-	// req.Price=<-chanPrice
-	// req.Name=<-chanName
-	// req.Type=<-chanType
-	// req.Percentage=<-chanPercentage
+	decrypted:=<-chanReq
+	fmt.Println("decrypted:",decrypted)
+	err:=json.Unmarshal([]byte(decrypted),&res)
+	if err!=nil{
+		fmt.Println("err decrypted:",err)
+	}
 
-	return req,nil
+	return res,nil
+}
+func DecryptTransItem(req models.DecTransactionItems)(models.TransactionItems,error){
+	res:=models.TransactionItems{}
+	chanReq:=make(chan string)
+	go DecryptFunc(req.Req,chanReq)
+
+	decrypted:=<-chanReq
+	fmt.Println("decrypted:",decrypted)
+	err:=json.Unmarshal([]byte(decrypted),&res)
+	if err!=nil{
+		fmt.Println("err decrypted:",err)
+	}
+
+	return res,nil
 }
 
 

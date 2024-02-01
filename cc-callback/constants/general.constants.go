@@ -13,5 +13,5 @@ const(
 	ERROR_ITEMS="Items Already Registered"
 	ERROR_DISCOUNTS="Discounts Already Registered"
 	ERROR_HOST="Failed to Get Response from Host"
-
+	ERROR_HEADER="Invalid Header"
 )
